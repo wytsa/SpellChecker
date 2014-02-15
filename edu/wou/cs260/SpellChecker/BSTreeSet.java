@@ -7,8 +7,10 @@ import java.util.Collection;
 import java.util.Iterator;
 //import java.util.Queue;
 import java.util.Set;
+import java.math.*;
 
 import edu.wou.cs260.SpellChecker.DLList.DLLNode;
+import edu.wou.cs260.SpellChecker.DLList.DLLIterator;
 
 /**
  * @author wytsa
@@ -33,25 +35,27 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		if(temp.item == null){
 			throw new NullPointerException();
 		}
-		else if(subTree == null){
-			
+		else if(root == null){
+			root = temp;
+			size = 1;
+			return true;
 		}
 		else{
-			root = addHelper(root, arg0);
+			addHelper(root, arg0);
+			size++;
 			return true;
 		}
 	}
 	
-	private Node addHelper(Node subTree, E item){
+	private Node addHelper(Node subTree, E arg0){
 		if(subTree == null){
-			size++;
-			return new Node(item);
+			return new Node(arg0);
 		}
-		else if(subTree.item.compareTo(item) < 0){// go left
-			subTree.lChild = addHelper(subTree.lChild, item);
+		else if(subTree.item.compareTo(arg0) < 0){// go left
+			subTree.lChild = addHelper(subTree.lChild, arg0);
 		}
 		else{// go right
-			subTree.rChild = addHelper(subTree.rChild, item);
+			subTree.rChild = addHelper(subTree.rChild, arg0);
 			subTree.height = calcHeight(subTree);
 			return subTree;
 		}
@@ -59,11 +63,11 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	}
 	
 	private int calcHeight(Node subTree){
-		return Math.max(getHeight(subTree.lchild), getHeight.rchild);//TODO
+		return Math.max(getHeight(subTree.lChild), getHeight(subTree.rChild));//TODO
 	}
 	
 	private int getHeight(Node subTree){
-		
+		return (subTree.height);
 	}
 
 	@Override
@@ -119,6 +123,7 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	//@SuppressWarnings("unchecked")
 	@Override
 	public Iterator<E> iterator() {
+		return iterator();
 		
 		// TODO Auto-generated method stub
 //		CREATE an new Queue<Node>
@@ -129,7 +134,7 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 //			With the node that was dequeued, if it has a right child, enqueue that child
 //			Visit the data element from the dequeued node
 //		end while
-		return null;//new iterator();
+		//return null;//new iterator();
 	}
 	
 	//traversal
