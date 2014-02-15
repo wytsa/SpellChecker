@@ -404,47 +404,34 @@ public class DLList<E>  implements List<E>, Queue<E>, CompareCount{
 	}
 
 	class DLLIterator implements Iterator<E> {
- 		DLLNode current = head;
+		// Iterator fields
+		DLLNode current = head; // starting node
+ 		private int itPos = 0; // start position
  		
  		public boolean hasNext() {
- 	    	if(current.next == null){
- 	    		return false;
+ 	    	if(current.next != null){
+ 	    		return true;
  	    	}
  	    	else
  	    	{ 	    		
- 	    		return true;
+ 	    		return false;
  	    	}
  	    }
 
 		public E next() {
-/*			full next() code;
-			if (nextIndex == size){
+			if(itPos == size){
 				throw new NoSuchElementException();
 			}
-			lastReturned = next;
-			next = next.next;
-			nextIndex++;
-			return lastReturned.element;
-*/
-
-/*			my code			
-			if(pos == size){
-				throw new NoSuchElementException();
+			else{
+				E result = current.data;
+				itPos++;
+				current = current.next;
+				return result;
 			}
-*/
-			if(current != null){
- 	    		current = current.next;
- 	    		E result = current.data;
- 	    		return result;
- 	    	}
- 	    	else{
- 	    		throw new NoSuchElementException();
- 	    	}
  	    }
 
  	    public void remove() {
  	    	DLList.this.remove(current.prev.data);
  	    }
-
  	}
 }
