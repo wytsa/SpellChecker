@@ -406,11 +406,12 @@ public class DLList<E>  implements List<E>, Queue<E>, CompareCount{
 
 	class DLLIterator implements Iterator<E> {
 		// Iterator fields
-		DLLNode current = head; // starting node
- 		private int itPos = 0; // start position
+		DLLNode current = head;   // starting node
+		private int nodePos = 0;  // current node position 
+ 		private int itPos = -1;    // start position
  		
  		public boolean hasNext() {
- 	    	if(current.next != null){
+ 	    	if(nodePos != size){
  	    		return true;
  	    	}
  	    	else
@@ -420,13 +421,14 @@ public class DLList<E>  implements List<E>, Queue<E>, CompareCount{
  	    }
 
 		public E next() {
+			itPos++;
 			if(itPos == size){
 				throw new NoSuchElementException();
 			}
 			else{				
-				E result = current.data;
+				E result = getNode(nodePos).data;
 				current = current.next;
-				itPos++;
+				nodePos++;				
 				return result;
 			}
  	    }
