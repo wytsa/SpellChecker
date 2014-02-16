@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 //import java.util.Queue;
 import java.util.Set;
-import java.math.*;
+import java.lang.Math.*;
 
 import edu.wou.cs260.SpellChecker.DLList.DLLNode;
 import edu.wou.cs260.SpellChecker.DLList.DLLIterator;
@@ -42,21 +42,22 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		}
 		else{
 			addHelper(root, arg0);
-			size++;
 			return true;
 		}
 	}
 	
 	private Node addHelper(Node subTree, E arg0){
 		if(subTree == null){
+			size++;
 			return new Node(arg0);
 		}
 		else if(subTree.item.compareTo(arg0) < 0){// go left
 			subTree.lChild = addHelper(subTree.lChild, arg0);
+			//subTree.height = calcHeight(subTree);
 		}
 		else{// go right
 			subTree.rChild = addHelper(subTree.rChild, arg0);
-			subTree.height = calcHeight(subTree);
+			//subTree.height = calcHeight(subTree);
 			return subTree;
 		}
 		return subTree;
@@ -67,7 +68,7 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	}
 	
 	private int getHeight(Node subTree){
-		return (subTree.height);
+		return (subTree.height);		
 	}
 
 	@Override
@@ -86,7 +87,6 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	public boolean contains(Object arg0) {
 		// TODO Auto-generated method stub
 		return has(root, arg0);
-		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -98,10 +98,10 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		else if(subTree.item.compareTo((E) item) < 0){// go left
 			has(subTree.lChild, item);
 		}
-		else{// if(subTree.item.compareTo(item) > 0){// go right
+		else{// if(subTree.item.compareTo((E) item) > 0){// go right
 			has(subTree.rChild, item);
 		}
-		return false;
+			return false;
 	}
 
 	@Override
@@ -123,18 +123,7 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	//@SuppressWarnings("unchecked")
 	@Override
 	public Iterator<E> iterator() {
-		return iterator();
-		
-		// TODO Auto-generated method stub
-//		CREATE an new Queue<Node>
-//		Enqueue (add) only the root node
-//		WHILE ( the Queue is not empty) DO
-//			Dequeue (remove) a node from the queue
-//			With the node that was dequeued, if it has a left child, enqueue that child
-//			With the node that was dequeued, if it has a right child, enqueue that child
-//			Visit the data element from the dequeued node
-//		end while
-		//return null;//new iterator();
+		return new TreeIterator();
 	}
 	
 	//traversal
@@ -221,10 +210,12 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		// 3 constructors
 		Node() {
 			this(null, null, null);
+			height = 0;
 		}
 
 		Node(E item) {
 			this(null, item, null);
+			height = 0;
 		}
 
 		Node(Node lChild, E item, Node rChild) {
@@ -238,7 +229,14 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	class TreeIterator implements Iterator<E>{
 		
 		DLList<E> que = new DLList<E>();
-
+//		Enqueue (add) only the root node
+//		WHILE ( the Queue is not empty) DO
+//			Dequeue (remove) a node from the queue
+//			With the node that was dequeued, if it has a left child, enqueue that child
+//			With the node that was dequeued, if it has a right child, enqueue that child
+//			Visit the data element from the dequeued node
+//		end while
+		
 		@Override
 		public boolean hasNext() {
 			// TODO Auto-generated method stub
@@ -254,9 +252,7 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		@Override
 		public void remove() {
 			// TODO Auto-generated method stub
-			
 		}
-		
 	}
 
 	@Override
