@@ -424,8 +424,8 @@ public class DLList<E>  implements List<E>, Queue<E>, CompareCount{
 				throw new NoSuchElementException();
 			}
 			else{				
-				current = current.next;
 				E result = current.data;
+				current = current.next;
 				itPos++;
 				return result;
 			}
