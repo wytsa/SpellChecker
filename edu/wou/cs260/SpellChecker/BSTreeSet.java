@@ -49,10 +49,11 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	private Node addHelper(Node subTree, E arg0){
 		if(subTree == null){
 			size++;
-			return new Node(arg0);
+			return subTree = new Node(arg0);
 		}
-		else if(subTree.item.compareTo(arg0) < 0){// go left
+		else if(subTree.item.compareTo(arg0) > 0){// go left
 			subTree.lChild = addHelper(subTree.lChild, arg0);
+			return subTree;
 			//subTree.height = calcHeight(subTree);
 		}
 		else{// go right
@@ -60,7 +61,6 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 			//subTree.height = calcHeight(subTree);
 			return subTree;
 		}
-		return subTree;
 	}
 	
 	private int calcHeight(Node subTree){
@@ -73,7 +73,6 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 
 	@Override
 	public boolean addAll(Collection<? extends E> arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -85,20 +84,26 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 
 	@Override
 	public boolean contains(Object arg0) {
-		// TODO Auto-generated method stub
-		return has(root, arg0);
+		if(has(root, arg0) == true){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	private Boolean has(Node subTree, Object item){
-		if(subTree.item.compareTo((E) item) == 0){
+		if(subTree == null){
+			return false;
+		}
+		else if(subTree.item.equals(item)){
 			compareCount++;
 			return true;
 		}
-		else if(subTree.item.compareTo((E) item) < 0){// go left
+		else if(subTree.item.compareTo((E) item) < 0){// go left 
 			has(subTree.lChild, item);
 		}
-		else{// if(subTree.item.compareTo((E) item) > 0){// go right
+		else if(subTree.item.compareTo((E) item) > 0){// go right
 			has(subTree.rChild, item);
 		}
 			return false;
@@ -106,7 +111,6 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 
 	@Override
 	public boolean containsAll(Collection<?> arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -120,7 +124,6 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		}
 	}
 
-	//@SuppressWarnings("unchecked")
 	@Override
 	public Iterator<E> iterator() {
 		return new TreeIterator();
@@ -172,13 +175,11 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 
 	@Override
 	public boolean removeAll(Collection<?> arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -189,13 +190,11 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 
 	@Override
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public <T> T[] toArray(T[] arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -229,8 +228,11 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	class TreeIterator implements Iterator<E>{
 		
 		DLList<E> que = new DLList<E>();
+		//que.add(root);
 //		Enqueue (add) only the root node
-//		WHILE ( the Queue is not empty) DO
+		//while(que != isEmpty()){
+			//if()
+		//}
 //			Dequeue (remove) a node from the queue
 //			With the node that was dequeued, if it has a left child, enqueue that child
 //			With the node that was dequeued, if it has a right child, enqueue that child
@@ -257,7 +259,6 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 
 	@Override
 	public int getLastCompareCount() {
-		// TODO Auto-generated method stub
 		return compareCount;
 	}
 
