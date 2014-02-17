@@ -218,17 +218,34 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	
 	class TreeIterator implements Iterator<E>{
 		
-		DLList<E> que = new DLList<E>();
-		//que.add(root);
-//		Enqueue (add) only the root node
-		//while(que != isEmpty()){
-			//if()
-		//}
+		DLList<Node> que;
+		
+		public TreeIterator(){
+			que = new DLList<Node>();
+			que.add(root);
+		
+			while(que.isEmpty() != true){
+				if(root.lChild != null){
+					que.add(root.lChild);
+				}
+				else if(root.rChild != null){
+					que.add(root.rChild);
+				}
+				else{
+					visit(root);
+					this.remove();
+				}
+			}
 //			Dequeue (remove) a node from the queue
 //			With the node that was dequeued, if it has a left child, enqueue that child
 //			With the node that was dequeued, if it has a right child, enqueue that child
 //			Visit the data element from the dequeued node
 //		end while
+		}
+		
+		public void visit(Node arg0){
+			System.out.println(que.get(0).item + " ");
+		}
 		
 		@Override
 		public boolean hasNext() {
