@@ -35,13 +35,11 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		if(temp.item == null){
 			throw new NullPointerException();
 		}
-		else if(root == null){
-			root = temp;
-			size = 1;
-			return true;
+		else if(contains(arg0)){
+			return false;
 		}
 		else{
-			addHelper(root, arg0);
+			root = addHelper(root, arg0);
 			return true;
 		}
 	}
@@ -49,18 +47,17 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	private Node addHelper(Node subTree, E arg0){
 		if(subTree == null){
 			size++;
-			return subTree = new Node(arg0);
+			return new Node(arg0);
 		}
-		else if(subTree.item.compareTo(arg0) > 0){// go left
+		else if(subTree.item.compareTo(arg0) < 0){// go left
 			subTree.lChild = addHelper(subTree.lChild, arg0);
-			return subTree;
 			//subTree.height = calcHeight(subTree);
 		}
 		else{// go right
 			subTree.rChild = addHelper(subTree.rChild, arg0);
 			//subTree.height = calcHeight(subTree);
-			return subTree;
 		}
+		return subTree;
 	}
 	
 	private int calcHeight(Node subTree){
@@ -84,12 +81,7 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 
 	@Override
 	public boolean contains(Object arg0) {
-		if(has(root, arg0) == true){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return has(root, arg0);
 	}
 	
 	private Boolean has(Node subTree, Object item){
@@ -101,12 +93,11 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 			return true;
 		}
 		else if(subTree.item.compareTo((E) item) < 0){// go left 
-			has(subTree.lChild, item);
+			return has(subTree.lChild, item);
 		}
-		else if(subTree.item.compareTo((E) item) > 0){// go right
-			has(subTree.rChild, item);
+		else{ //if(subTree.item.compareTo((E) item) > 0){// go right
+			return has(subTree.rChild, item);
 		}
-			return false;
 	}
 
 	@Override
