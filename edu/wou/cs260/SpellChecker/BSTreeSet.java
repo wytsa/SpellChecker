@@ -5,6 +5,7 @@ package edu.wou.cs260.SpellChecker;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 //import java.util.Queue;
 import java.util.Set;
 import java.lang.Math.*;
@@ -217,14 +218,17 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	}
 	
 	class TreeIterator implements Iterator<E>{
-		
+		// Iterator fields
 		DLList<Node> que;
+		private int quePos = 0;
+		private int itPos = -1;
+		private Node currentNode;
 		
-		public TreeIterator(){
-			que = new DLList<Node>();
-			que.add(root);
+//		public TreeIterator(){
+//			que = new DLList<Node>();
+//			que.add(root);
 		
-			while(que.isEmpty() != true){
+/*			while(que.isEmpty() != true){
 				if(root.lChild != null){
 					que.add(root.lChild);
 				}
@@ -236,12 +240,14 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 					this.remove();
 				}
 			}
+			*/
+			
 //			Dequeue (remove) a node from the queue
 //			With the node that was dequeued, if it has a left child, enqueue that child
 //			With the node that was dequeued, if it has a right child, enqueue that child
 //			Visit the data element from the dequeued node
 //		end while
-		}
+//		}
 		
 		public void visit(Node arg0){
 			System.out.println(que.get(0).item + " ");
@@ -249,19 +255,36 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			if(currentNode.lChild != null){
+				return true;
+			}
+			else if(currentNode.rChild != null){
+				return true;
+			}
+			else{
+				return false;
+			}
 		}
 
 		@Override
 		public E next() {
+			if(currentNode.lChild != null){
+				que.add(currentNode.lChild);
+			}
+			else if(currentNode.rChild != null){
+				que.add(currentNode.rChild);
+			}
+			else{
+				throw new NoSuchElementException();
+			}
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public void remove() {
-			// TODO Auto-generated method stub
+			currentNode = que.get(0);
+			que.remove();
 		}
 	}
 
