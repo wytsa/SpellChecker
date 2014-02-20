@@ -6,15 +6,13 @@ package edu.wou.cs260.SpellChecker;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-//import java.util.Queue;
 import java.util.Set;
 import java.lang.Math.*;
-
 import edu.wou.cs260.SpellChecker.DLList.DLLNode;
 import edu.wou.cs260.SpellChecker.DLList.DLLIterator;
 
 /**
- * @author wytsa
+ * @author sam wytoski
  * 
  */
 public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount {
@@ -25,15 +23,14 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		compareCount = 0;
 	}
 	
-	private int size;
-	private Node root;
-	private int compareCount;
+	protected int size;
+	protected Node root;
+	protected int compareCount;
 
 	@Override
 	public boolean add(E arg0) {
 		// TODO Auto-generated method stub
-		Node temp = new Node(arg0);
-		if(temp.item == null){
+		if(arg0 == null){
 			throw new NullPointerException();
 		}
 		else if(contains(arg0)){
@@ -45,28 +42,43 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		}
 	}
 	
-	private Node addHelper(Node subTree, E arg0){
+	protected Node addHelper(Node subTree, E arg0){
 		if(subTree == null){
 			size++;
 			return new Node(arg0);
 		}
-		else if(subTree.item.compareTo(arg0) < 0){// go left
+		else if(subTree.item.compareTo(arg0) > 0){// go left
 			subTree.lChild = addHelper(subTree.lChild, arg0);
-			//subTree.height = calcHeight(subTree);
 		}
 		else{// go right
 			subTree.rChild = addHelper(subTree.rChild, arg0);
-			//subTree.height = calcHeight(subTree);
 		}
+		subTree.height = calcHeight(subTree) + 1;
 		return subTree;
 	}
 	
-	private int calcHeight(Node subTree){
-		return Math.max(getHeight(subTree.lChild), getHeight(subTree.rChild));//TODO
+	protected int calcHeight(Node subTree){
+		if(subTree.lChild != null && subTree.rChild != null){
+			return Math.max(getHeight(subTree.lChild), getHeight(subTree.rChild));
+		}
+		else if(subTree.lChild != null && subTree.rChild == null){
+			return Math.max(getHeight(subTree.lChild), -1);
+		}
+		else if(subTree.lChild == null && subTree.rChild != null){
+			return Math.max(-1, getHeight(subTree.rChild));
+		}
+		else{
+			return -1;
+		}
 	}
 	
-	private int getHeight(Node subTree){
-		return (subTree.height);		
+	protected int getHeight(Node subTree){
+		if(subTree == null){
+			return -1;
+		}
+		else{
+			return (subTree.height);
+		}
 	}
 
 	@Override
@@ -85,7 +97,7 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 		return has(root, arg0);
 	}
 	
-	private Boolean has(Node subTree, Object item){
+	protected Boolean has(Node subTree, Object item){
 		if(subTree == null){
 			return false;
 		}
@@ -93,7 +105,7 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 			compareCount++;
 			return true;
 		}
-		else if(subTree.item.compareTo((E) item) < 0){// go left 
+		else if(subTree.item.compareTo((E) item) > 0){// go left 
 			return has(subTree.lChild, item);
 		}
 		else{ //if(subTree.item.compareTo((E) item) > 0){// go right
@@ -220,71 +232,35 @@ public class BSTreeSet<E extends Comparable<E>> implements Set<E>, CompareCount 
 	class TreeIterator implements Iterator<E>{
 		// Iterator fields
 		DLList<Node> que;
-		private int quePos = 0;
-		private int itPos = -1;
-		private Node currentNode;
 		
-//		public TreeIterator(){
-//			que = new DLList<Node>();
-//			que.add(root);
-		
-/*			while(que.isEmpty() != true){
-				if(root.lChild != null){
-					que.add(root.lChild);
-				}
-				else if(root.rChild != null){
-					que.add(root.rChild);
-				}
-				else{
-					visit(root);
-					this.remove();
-				}
-			}
-			*/
-			
-//			Dequeue (remove) a node from the queue
-//			With the node that was dequeued, if it has a left child, enqueue that child
-//			With the node that was dequeued, if it has a right child, enqueue that child
-//			Visit the data element from the dequeued node
-//		end while
-//		}
+		public TreeIterator(){
+			que = new DLList<Node>();
+			que.add(root);
+		}
 		
 		public void visit(Node arg0){
-			System.out.println(que.get(0).item + " ");
+			System.out.println(arg0.item + " ");
 		}
 		
 		@Override
 		public boolean hasNext() {
-			if(currentNode.lChild != null){
-				return true;
-			}
-			else if(currentNode.rChild != null){
-				return true;
-			}
-			else{
-				return false;
-			}
+			return !que.isEmpty();
 		}
 
 		@Override
 		public E next() {
-			if(currentNode.lChild != null){
-				que.add(currentNode.lChild);
+			Node result = que.remove();
+			if(result.lChild != null){
+				que.add(result.lChild);
 			}
-			else if(currentNode.rChild != null){
-				que.add(currentNode.rChild);
-			}
-			else{
-				throw new NoSuchElementException();
-			}
-			// TODO Auto-generated method stub
-			return null;
+			if(result.rChild != null){
+				que.add(result.rChild);
+			}			
+			return result.item;
 		}
 
 		@Override
 		public void remove() {
-			currentNode = que.get(0);
-			que.remove();
 		}
 	}
 
